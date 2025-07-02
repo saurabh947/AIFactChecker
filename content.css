@@ -1,0 +1,10 @@
+/* Minimal CSS for content script - only essential styles */
+.ai-fact-checker-highlight {
+  background-color: rgba(102, 126, 234, 0.2) !important;
+  border-bottom: 2px solid #667eea !important;
+  cursor: pointer !important;
+}
+
+.ai-fact-checker-highlight:hover {
+  background-color: rgba(102, 126, 234, 0.3) !important;
+} 

@@ -1,0 +1,41 @@
+{
+  "name": "ai-fact-checker",
+  "version": "1.0.0",
+  "description": "A Chrome extension for instant AI-powered fact-checking with multi-provider support",
+  "main": "background.js",
+  "scripts": {
+    "build": "echo 'Extension built successfully'",
+    "dev": "echo 'Development mode - load extension in Chrome'",
+    "test": "echo 'No tests configured yet'",
+    "lint": "echo 'No linter configured yet'",
+    "package": "zip -r ai-fact-checker.zip . -x '*.git*' 'node_modules/*' '*.DS_Store' '*.log'"
+  },
+  "keywords": [
+    "chrome-extension",
+    "fact-checking",
+    "ai",
+    "openai",
+    "google-ai",
+    "perplexity",
+    "verification",
+    "truth-checking"
+  ],
+  "author": "AI Fact Checker Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/ai-fact-checker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/ai-fact-checker/issues"
+  },
+  "homepage": "https://github.com/yourusername/ai-fact-checker#readme",
+  "devDependencies": {},
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "browserslist": [
+    "Chrome >= 88"
+  ]
+} 
