@@ -45,16 +45,25 @@ A powerful Chrome browser extension that provides instant fact-checking capabili
    cd ai-fact-checker
    ```
 
-2. **Open Chrome Extensions**
+2. **Configure API Keys (Optional)**
+   
+   The extension comes with a free tier that works immediately without any setup!
+   
+   If you want to use your own API keys for unlimited usage:
+   - Open the extension popup
+   - Go to the Settings tab
+   - Add your API key for your preferred provider
+
+3. **Open Chrome Extensions**
    - Open Chrome and navigate to `chrome://extensions/`
    - Enable "Developer mode" in the top right corner
 
-3. **Load the Extension**
+4. **Load the Extension**
    - Click "Load unpacked"
    - Select the `AIFactChecker` folder
    - The extension should now appear in your extensions list
 
-4. **Pin the Extension**
+5. **Pin the Extension**
    - Click the puzzle piece icon in Chrome's toolbar
    - Find "AI Fact Checker" and click the pin icon
 
@@ -65,7 +74,16 @@ A powerful Chrome browser extension that provides instant fact-checking capabili
 
 ## ⚙️ Configuration
 
-### Setting Up API Keys
+### Free Tier Available! 🎉
+
+**No API Key Required**: You can use the extension immediately without any setup! The free tier provides:
+- **20 requests per day** using Google's Gemini AI
+- **Instant fact-checking** with no configuration needed
+- **Full feature access** including truth scores, analysis, and sources
+
+### Setting Up Your Own API Key (Optional)
+
+For unlimited usage or to use different AI providers:
 
 1. **Open Extension Settings**
    - Click the AI Fact Checker icon in your toolbar
@@ -78,6 +96,7 @@ A powerful Chrome browser extension that provides instant fact-checking capabili
 3. **Add Your API Key**
    - Enter your API key in the designated field
    - Your key is stored locally and never shared
+   - Leave empty to continue using the free tier
 
 ### Getting API Keys
 
@@ -100,6 +119,8 @@ A powerful Chrome browser extension that provides instant fact-checking capabili
 4. Copy and paste the key into the extension
 
 ## 🎯 Usage
+
+**Ready to use immediately!** No setup required - just start fact-checking:
 
 ### Method 1: Context Menu (Recommended)
 1. **Select Text**: Highlight any text on any webpage
@@ -169,46 +190,21 @@ A powerful Chrome browser extension that provides instant fact-checking capabili
 - Fact-check competing studies
 
 ### For General Users
-- Verify news articles
-- Check social media claims
-- Validate product information
-- Research topics of interest
-
-## 🚀 Future Features
-
-### Planned Enhancements
-- **Batch Fact-Checking**: Check multiple claims at once
-- **Custom AI Models**: Support for additional AI providers
-- **Fact-Checking History**: Save and review past checks
-- **Export Results**: Save fact-checking reports
-- **Collaborative Features**: Share fact-checks with others
-- **Advanced Analytics**: Detailed accuracy metrics
-
-### Community Features
-- **User Submissions**: Submit claims for community verification
-- **Rating System**: Rate the quality of fact-checks
-- **Discussion Forums**: Discuss controversial claims
-- **Expert Verification**: Professional fact-checker reviews
+- Verify news articles and social media posts
+- Check product claims and reviews
+- Validate health and medical information
+- Fact-check political statements and debates
 
 ## 🤝 Contributing
 
-We welcome contributions! Here's how you can help:
+We welcome contributions! Please feel free to submit issues, feature requests, or pull requests.
 
-### Development
-1. Fork the repository
-2. Create a feature branch
+### Development Setup
+1. Clone the repository
+2. Install dependencies (if any)
 3. Make your changes
-4. Submit a pull request
-
-### Bug Reports
-- Use the GitHub Issues page
-- Provide detailed reproduction steps
-- Include browser and extension versions
-
-### Feature Requests
-- Submit ideas through GitHub Issues
-- Explain the use case and benefits
-- Consider implementation complexity
+4. Test thoroughly
+5. Submit a pull request
 
 ## 📄 License
 
@@ -216,54 +212,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- **OpenAI**: For providing the GPT-4 API
-- **Google**: For the Gemini AI platform
-- **Perplexity**: For their web-connected AI service
-- **Chrome Extensions Team**: For the excellent documentation and tools
-
-## 📞 Support
-
-### Getting Help
-- **Documentation**: Check this README first
-- **GitHub Issues**: Report bugs or request features
-- **Discussions**: Join community discussions
-- **Email**: Contact us directly for support
-
-### Common Issues
-
-#### Extension Not Working
-1. Check if API key is configured
-2. Verify internet connection
-3. Ensure extension is enabled
-4. Try refreshing the page
-
-#### API Errors
-1. Verify API key is correct
-2. Check API provider status
-3. Ensure sufficient API credits
-4. Try a different AI provider
-
-#### Performance Issues
-1. Close unnecessary tabs
-2. Clear browser cache
-3. Restart Chrome
-4. Update the extension
-
-## 🔄 Updates
-
-### Version History
-- **v1.0.0**: Initial release with core features
-- **v1.1.0**: Added multi-language support
-- **v1.2.0**: Enhanced UI and performance
-- **v1.3.0**: Added Perplexity AI support
-
-### Auto-Updates
-- The extension updates automatically when available
-- Manual updates available through Chrome Web Store
-- Development version requires manual updates
+- Built with modern web technologies
+- Powered by leading AI providers
+- Designed for privacy and security
+- Created for the community
 
 ---
 
-**Made with ❤️ for a more informed internet**
-
-*AI Fact Checker - Your trusted companion for truth verification* 
+**Note**: This extension is for educational and informational purposes. Always verify important information through multiple sources and consult experts when needed. 

@@ -2,8 +2,49 @@
 document.addEventListener('DOMContentLoaded', function() {
   // Initialize popup
   loadSettings();
+  loadDailyLimitInfo();
   setupEventListeners();
+  setupModelSelection();
+  
+  // Check and reload free tier API key
+  checkFreeTierStatus();
 });
+
+// Check free tier status and reload API key if needed
+function checkFreeTierStatus() {
+  chrome.runtime.sendMessage({ action: 'getFreeTierStatus' }, (response) => {
+    console.log('Free tier status:', response);
+    if (response && !response.freeTierAvailable) {
+      console.log('Free tier not available, attempting to reload API key...');
+      chrome.runtime.sendMessage({ action: 'reloadApiKey' }, (reloadResponse) => {
+        if (reloadResponse && reloadResponse.success) {
+          console.log('API key reloaded successfully');
+        } else {
+          console.log('Failed to reload API key');
+        }
+      });
+    } else if (response && response.freeTierAvailable) {
+      console.log('Free tier available with key length:', response.keyLength);
+    }
+  });
+}
+
+// Model configurations for each provider
+const MODEL_CONFIGS = {
+  openai: [
+    { value: 'gpt-4', label: 'GPT-4 (Most Capable)', description: 'Best for complex reasoning' },
+    { value: 'gpt-3.5-turbo', label: 'GPT-3.5 Turbo (Fast)', description: 'Fast and cost-effective' }
+  ],
+  google: [
+    { value: 'gemini-1.5-flash', label: 'Gemini 1.5 Flash (Free Tier)', description: 'Fast and efficient' },
+    { value: 'gemini-pro', label: 'Gemini Pro (Standard)', description: 'Balanced performance' },
+    { value: 'gemini-2.0-flash-exp', label: 'Gemini 2.0 Flash (Fast)', description: 'Quick responses' }
+  ],
+  perplexity: [
+    { value: 'llama-3.1-sonar-small-128k-online', label: 'Llama 3.1 Sonar (Online)', description: 'Web-connected verification' },
+    { value: 'llama-3.1-sonar-small-128k', label: 'Llama 3.1 Sonar (Offline)', description: 'Fast offline processing' }
+  ]
+};
 
 // Tab switching functionality
 function setupEventListeners() {
@@ -29,29 +70,71 @@ function setupEventListeners() {
     });
   });
 
-  // Fact checking
-  const checkBtn = document.getElementById('check-btn');
-  const factText = document.getElementById('fact-text');
-
-  checkBtn.addEventListener('click', performFactCheck);
-  factText.addEventListener('keydown', (e) => {
-    if (e.ctrlKey && e.key === 'Enter') {
-      performFactCheck();
-    }
-  });
-
   // Settings
   const saveSettingsBtn = document.getElementById('save-settings');
   saveSettingsBtn.addEventListener('click', saveSettings);
+
+  // Provider change handler
+  const providerSelect = document.getElementById('api-provider');
+  providerSelect.addEventListener('change', updateModelOptions);
+
+  // GitHub link
+  const githubLink = document.getElementById('github-link');
+  githubLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    chrome.tabs.create({ url: 'https://github.com/saurabh947/AIFactChecker' });
+  });
+
+  // Listen for messages to refresh daily limit
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === 'refreshDailyLimit') {
+      loadDailyLimitInfo();
+    }
+  });
+}
+
+// Setup model selection functionality
+function setupModelSelection() {
+  updateModelOptions();
+}
+
+// Update model options based on selected provider
+function updateModelOptions() {
+  const providerSelect = document.getElementById('api-provider');
+  const modelSelect = document.getElementById('api-model');
+  const selectedProvider = providerSelect.value;
+  
+  // Clear existing options
+  modelSelect.innerHTML = '';
+  
+  // Add new options based on provider
+  const models = MODEL_CONFIGS[selectedProvider] || [];
+  models.forEach(model => {
+    const option = document.createElement('option');
+    option.value = model.value;
+    option.textContent = `${model.label} - ${model.description}`;
+    modelSelect.appendChild(option);
+  });
+  
+  // Set default model for the provider
+  if (models.length > 0) {
+    modelSelect.value = models[0].value;
+  }
 }
 
 // Load saved settings
 function loadSettings() {
   chrome.runtime.sendMessage({ action: 'getSettings' }, (response) => {
     if (response) {
-      document.getElementById('api-provider').value = response.provider;
-      document.getElementById('api-key').value = response.apiKey;
-      document.getElementById('language').value = response.language;
+      document.getElementById('api-provider').value = response.provider || 'openai';
+      document.getElementById('api-key').value = response.apiKey || '';
+      document.getElementById('language').value = response.language || 'en';
+      
+      // Update model options and set saved model
+      updateModelOptions();
+      if (response.model) {
+        document.getElementById('api-model').value = response.model;
+      }
     }
   });
 }
@@ -59,18 +142,17 @@ function loadSettings() {
 // Save settings
 function saveSettings() {
   const provider = document.getElementById('api-provider').value;
+  const model = document.getElementById('api-model').value;
   const apiKey = document.getElementById('api-key').value;
   const language = document.getElementById('language').value;
   const statusDiv = document.getElementById('settings-status');
 
-  if (!apiKey.trim()) {
-    showStatus('Please enter an API key', 'error');
-    return;
-  }
+  // API key is optional - if not provided, free tier will be used
 
   chrome.runtime.sendMessage({
     action: 'saveSettings',
     provider: provider,
+    model: model,
     apiKey: apiKey,
     language: language
   }, (response) => {
@@ -94,168 +176,58 @@ function showStatus(message, type) {
   }, 3000);
 }
 
-// Perform fact checking
-async function performFactCheck() {
-  const factText = document.getElementById('fact-text').value.trim();
-  const checkBtn = document.getElementById('check-btn');
-  const btnText = checkBtn.querySelector('.btn-text');
-  const spinner = checkBtn.querySelector('.loading-spinner');
-
-  if (!factText) {
-    alert('Please enter some text to fact-check');
-    return;
-  }
-
-  // Get current settings
-  const settings = await getCurrentSettings();
-  if (!settings.apiKey) {
-    alert('Please configure your API key in the Settings tab');
-    return;
-  }
-
-  // Show loading state
-  checkBtn.disabled = true;
-  btnText.style.display = 'none';
-  spinner.style.display = 'inline';
-
-  try {
-    // Call fact checking API
-    const result = await chrome.runtime.sendMessage({
-      action: 'factCheckAPI',
-      text: factText,
-      provider: settings.provider,
-      apiKey: settings.apiKey,
-      language: settings.language
-    });
-
-    if (result.error) {
-      throw new Error(result.error);
+// Load and display daily limit information
+function loadDailyLimitInfo() {
+  chrome.runtime.sendMessage({ action: 'checkDailyLimit' }, (response) => {
+    if (response && !response.error) {
+      updateDailyLimitDisplay(response);
     }
-
-    // Display results
-    displayResults(result);
-
-  } catch (error) {
-    console.error('Fact check error:', error);
-    alert(`Fact checking failed: ${error.message}`);
-  } finally {
-    // Reset button state
-    checkBtn.disabled = false;
-    btnText.style.display = 'inline';
-    spinner.style.display = 'none';
-  }
-}
-
-// Get current settings
-function getCurrentSettings() {
-  return new Promise((resolve) => {
-    chrome.runtime.sendMessage({ action: 'getSettings' }, (response) => {
-      resolve(response || {});
-    });
   });
 }
 
-// Display fact checking results
-function displayResults(result) {
-  const resultContainer = document.getElementById('result-container');
-  const scoreValue = document.getElementById('score-value');
-  const analysisText = document.getElementById('analysis-text');
-  const evidenceText = document.getElementById('evidence-text');
-  const sourcesList = document.getElementById('sources-list');
-  const correctionsContainer = document.getElementById('corrections-container');
-  const correctionsList = document.getElementById('corrections-list');
-
-  // Update truth score
-  scoreValue.textContent = result.truthScore || 0;
-
-  // Update analysis
-  analysisText.textContent = result.analysis || 'No analysis available';
-
-  // Update evidence
-  evidenceText.textContent = result.evidence || 'No evidence provided';
-
-  // Update sources
-  sourcesList.innerHTML = '';
-  if (result.sources && result.sources.length > 0) {
-    result.sources.forEach(source => {
-      const li = document.createElement('li');
-      if (typeof source === 'string') {
-        if (source.startsWith('http')) {
-          const a = document.createElement('a');
-          a.href = source;
-          a.target = '_blank';
-          a.textContent = source;
-          li.appendChild(a);
-        } else {
-          li.textContent = source;
-        }
-      } else if (source.url) {
-        const a = document.createElement('a');
-        a.href = source.url;
-        a.target = '_blank';
-        a.textContent = source.title || source.url;
-        li.appendChild(a);
-      }
-      sourcesList.appendChild(li);
-    });
-  } else {
-    const li = document.createElement('li');
-    li.textContent = 'No sources provided';
-    sourcesList.appendChild(li);
-  }
-
-  // Update corrections
-  correctionsList.innerHTML = '';
-  if (result.corrections && result.corrections.length > 0) {
-    result.corrections.forEach(correction => {
-      const li = document.createElement('li');
-      li.textContent = correction;
-      correctionsList.appendChild(li);
-    });
-    correctionsContainer.style.display = 'block';
-  } else {
-    correctionsContainer.style.display = 'none';
-  }
-
-  // Show results
-  resultContainer.style.display = 'block';
-
-  // Animate score
-  animateScore(result.truthScore || 0);
-}
-
-// Animate the truth score
-function animateScore(targetScore) {
-  const scoreElement = document.getElementById('score-value');
-  const startScore = 0;
-  const duration = 1000; // 1 second
-  const startTime = performance.now();
-
-  function updateScore(currentTime) {
-    const elapsed = currentTime - startTime;
-    const progress = Math.min(elapsed / duration, 1);
+// Update daily limit display
+function updateDailyLimitDisplay(limitInfo) {
+  const limitDisplay = document.getElementById('daily-limit-display');
+  if (limitDisplay) {
+    let remainingText = '';
+    let cssClass = 'available';
+    let tierInfo = '';
     
-    // Easing function for smooth animation
-    const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-    const currentScore = Math.round(startScore + (targetScore - startScore) * easeOutQuart);
+    // Check if user has their own API key
+    const apiKeyInput = document.getElementById('api-key');
+    const hasOwnKey = apiKeyInput && apiKeyInput.value.trim() !== '';
     
-    scoreElement.textContent = currentScore;
-    
-    if (progress < 1) {
-      requestAnimationFrame(updateScore);
+    if (!hasOwnKey) {
+      tierInfo = '<span class="free-tier-badge">Using Free Tier (Gemini)</span>';
     }
+    
+    if (!limitInfo.canMakeRequest) {
+      remainingText = 'Daily limit reached';
+      cssClass = 'limit-reached';
+    } else if (limitInfo.remainingRequests <= 3) {
+      remainingText = `${limitInfo.remainingRequests} requests remaining today`;
+      cssClass = 'limit-warning';
+    } else {
+      remainingText = `${limitInfo.remainingRequests} requests remaining today`;
+      cssClass = 'available';
+    }
+    
+    const totalText = `${limitInfo.totalRequests}/20 requests used today`;
+    
+    limitDisplay.innerHTML = `
+      <div class="limit-info">
+        <span class="remaining-requests ${cssClass}">${remainingText}</span>
+        <span class="total-requests">${totalText}</span>
+        ${tierInfo}
+      </div>
+    `;
   }
-
-  requestAnimationFrame(updateScore);
 }
 
-// Auto-resize textarea
-document.addEventListener('DOMContentLoaded', function() {
-  const textarea = document.getElementById('fact-text');
-  if (textarea) {
-    textarea.addEventListener('input', function() {
-      this.style.height = 'auto';
-      this.style.height = Math.min(this.scrollHeight, 200) + 'px';
-    });
-  }
-}); 
+
+
+
+
+
+
+

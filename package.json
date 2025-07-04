@@ -24,12 +24,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/ai-fact-checker.git"
+    "url": "https://github.com/saurabh947/ai-fact-checker.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/ai-fact-checker/issues"
+    "url": "https://github.com/saurabh947/ai-fact-checker/issues"
   },
-  "homepage": "https://github.com/yourusername/ai-fact-checker#readme",
+  "homepage": "https://github.com/saurabh947/ai-fact-checker#readme",
   "devDependencies": {},
   "dependencies": {},
   "engines": {

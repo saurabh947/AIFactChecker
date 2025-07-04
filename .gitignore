@@ -55,4 +55,5 @@ temp/
 
 # API keys (for development)
 api-keys.json
-secrets.json 
+secrets.json
+key_config.js 
