@@ -1,6 +1,6 @@
 # Privacy Policy for AI Fact Checker Chrome Extension
 
-**Last Updated:** December 2024
+**Last Updated:** July 2025
 
 ## Overview
 
