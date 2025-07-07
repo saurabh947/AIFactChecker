@@ -78,13 +78,6 @@ function setupEventListeners() {
   const providerSelect = document.getElementById('api-provider');
   providerSelect.addEventListener('change', updateModelOptions);
 
-  // GitHub link
-  const githubLink = document.getElementById('github-link');
-  githubLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    chrome.tabs.create({ url: 'https://github.com/saurabh947/AIFactChecker' });
-  });
-
   // Listen for messages to refresh daily limit
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === 'refreshDailyLimit') {
