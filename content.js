@@ -21,7 +21,7 @@ if (typeof window.aiFactCheckerInitialized === 'undefined') {
     <div class="fact-checker-overlay">
       <div class="fact-checker-modal animated-modal">
         <div class="modal-header">
-          <h2>🔍 AI Fact Checker</h2>
+          <h2>AI Fact Checker</h2>
           <button class="close-btn" onclick="this.closest('#ai-fact-checker-modal').remove()">×</button>
         </div>
         <div class="modal-content">
@@ -41,27 +41,27 @@ if (typeof window.aiFactCheckerInitialized === 'undefined') {
               </div>
             </div>
             <div class="analysis-section animated-fadein">
-              <h3>📊 Analysis</h3>
+              <h3>Analysis</h3>
               <p class="analysis-text"></p>
             </div>
             <div class="evidence-section animated-fadein">
-              <h3>🔍 Evidence</h3>
+              <h3>Evidence</h3>
               <p class="evidence-text"></p>
             </div>
             <div class="sources-section animated-fadein">
-              <h3>📚 Sources</h3>
+              <h3>Sources</h3>
               <ul class="sources-list"></ul>
             </div>
             <div class="corrections-section animated-fadein" style="display: none;">
-              <h3>⚠️ Corrections</h3>
+              <h3>Corrections</h3>
               <ul class="corrections-list"></ul>
             </div>
             <div class="source-credibility-section animated-fadein" style="display: none;">
-              <h3>🏛️ Source Credibility</h3>
+              <h3>Source Credibility</h3>
               <p class="source-credibility-text"></p>
             </div>
             <div class="contextual-notes-section animated-fadein" style="display: none;">
-              <h3>📝 Contextual Notes</h3>
+              <h3>Contextual Notes</h3>
               <p class="contextual-notes-text"></p>
             </div>
           </div>
@@ -944,7 +944,7 @@ async function performFactCheck(text) {
         await chrome.runtime.sendMessage({ action: 'reloadApiKey' });
         console.log('Reloaded API key for free tier');
       } catch (error) {
-        console.log('Failed to reload API key:', error);
+        console.log('Failed to reload API key');
       }
     }
 
@@ -1116,6 +1116,380 @@ function animateModalScore(targetScore) {
   requestAnimationFrame(updateScore);
 }
 
+// Show YouTube fact check modal with results
+// Show initial YouTube modal with loading state
+function showYouTubeModal() {
+  if (modal) {
+    modal.remove();
+  }
+
+  // Create modal container
+  modal = document.createElement('div');
+  modal.id = 'ai-fact-checker-modal';
+  modal.innerHTML = `
+    <div class="fact-checker-overlay">
+      <div class="fact-checker-modal animated-modal">
+        <div class="modal-header">
+          <h2>YouTube Video Fact Check</h2>
+          <button class="close-btn" onclick="this.closest('#ai-fact-checker-modal').remove()">×</button>
+        </div>
+        <div class="modal-content">
+          <div class="loading-section">
+            <div class="loading-spinner"></div>
+            <p>Initializing YouTube fact check...</p>
+          </div>
+          <div class="progress-section" style="display: none;">
+            <div class="progress-step active" data-step="transcript">
+              <div class="step-icon">1</div>
+              <div class="step-text">Extracting transcript</div>
+            </div>
+            <div class="progress-step" data-step="factcheck">
+              <div class="step-icon">2</div>
+              <div class="step-text">Fact checking with AI</div>
+            </div>
+          </div>
+          <div class="youtube-info" style="display: none;">
+            <h3>Video Information</h3>
+            <div class="video-details"></div>
+          </div>
+          <div class="transcript-preview" style="display: none;">
+            <h3>Transcript Preview</h3>
+            <div class="transcript-content"></div>
+          </div>
+          <div class="results-section" style="display: none;">
+            <div class="truth-score">
+              <div class="score-circle">
+                <span class="score-value">0</span>
+                <span class="score-label">Truth Score</span>
+              </div>
+            </div>
+            <div class="analysis-section">
+              <h3>Analysis</h3>
+              <p class="analysis-text"></p>
+            </div>
+            <div class="evidence-section">
+              <h3>Evidence</h3>
+              <p class="evidence-text"></p>
+            </div>
+            <div class="sources-section">
+              <h3>Sources</h3>
+              <ul class="sources-list"></ul>
+            </div>
+            <div class="corrections-section" style="display: none;">
+              <h3>Corrections</h3>
+              <ul class="corrections-list"></ul>
+            </div>
+            <div class="source-credibility-section" style="display: none;">
+              <h3>Source Credibility</h3>
+              <p class="source-credibility-text"></p>
+            </div>
+            <div class="contextual-notes-section" style="display: none;">
+              <h3>Contextual Notes</h3>
+              <p class="contextual-notes-text"></p>
+            </div>
+          </div>
+          <div class="error-section" style="display: none;">
+            <div class="error-icon">⚠️</div>
+            <h3>Error</h3>
+            <p class="error-message"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Add modal to page
+  document.body.appendChild(modal);
+
+  // Inject CSS if not already present
+  if (!document.getElementById('ai-fact-checker-styles')) {
+    injectModalStyles();
+  }
+
+  // Add YouTube-specific styles
+  injectYouTubeStyles();
+
+  // Add click-outside-to-dismiss functionality
+  const overlay = modal.querySelector('.fact-checker-overlay');
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) {
+      modal.remove();
+    }
+  });
+}
+
+// Update modal with transcript data
+function updateModalWithTranscript(videoInfo, transcript) {
+  if (!modal) return;
+  
+  // Hide loading, show progress
+  const loadingSection = modal.querySelector('.loading-section');
+  const progressSection = modal.querySelector('.progress-section');
+  const youtubeInfo = modal.querySelector('.youtube-info');
+  const transcriptPreview = modal.querySelector('.transcript-preview');
+  
+  if (loadingSection) loadingSection.style.display = 'none';
+  if (progressSection) progressSection.style.display = 'block';
+  
+  // Update progress step
+  const transcriptStep = modal.querySelector('[data-step="transcript"]');
+  if (transcriptStep) {
+    transcriptStep.classList.add('completed');
+    transcriptStep.querySelector('.step-text').textContent = 'Transcript extracted ✓';
+  }
+  
+  // Activate fact-checking step
+  const factcheckStep = modal.querySelector('[data-step="factcheck"]');
+  if (factcheckStep) {
+    factcheckStep.classList.add('active');
+    factcheckStep.querySelector('.step-text').textContent = 'Fact checking with AI...';
+  }
+  
+  // Show video info
+  if (youtubeInfo) {
+    youtubeInfo.style.display = 'block';
+    const videoDetails = youtubeInfo.querySelector('.video-details');
+    videoDetails.innerHTML = `
+      <p><strong>Title:</strong> ${videoInfo.title || 'Unknown'}</p>
+      <p><strong>Channel:</strong> ${videoInfo.channel || 'Unknown'}</p>
+      <p><strong>Upload Date:</strong> ${videoInfo.uploadDate || 'Unknown'}</p>
+      <p><strong>Language:</strong> ${videoInfo.language || 'Unknown'}</p>
+    `;
+  }
+  
+  // Show transcript preview
+  if (transcriptPreview) {
+    transcriptPreview.style.display = 'block';
+    const transcriptContent = transcriptPreview.querySelector('.transcript-content');
+    transcriptContent.innerHTML = `
+      <p>${transcript.substring(0, 100)}${transcript.length > 100 ? '...' : ''}</p>
+      <small>Full transcript length: ${transcript.length} characters</small>
+    `;
+  }
+}
+
+// Update modal with fact check results
+function updateModalWithResults(result) {
+  if (!modal) return;
+  
+  // Update progress step
+  const factcheckStep = modal.querySelector('[data-step="factcheck"]');
+  if (factcheckStep) {
+    factcheckStep.classList.add('completed');
+    factcheckStep.querySelector('.step-text').textContent = 'Fact check completed ✓';
+  }
+  
+  // Hide progress, show results
+  const progressSection = modal.querySelector('.progress-section');
+  const resultsSection = modal.querySelector('.results-section');
+  
+  if (progressSection) progressSection.style.display = 'none';
+  if (resultsSection) resultsSection.style.display = 'block';
+  
+  // Display the results
+  displayModalResults(result);
+}
+
+// Show error in modal
+function showModalError(message) {
+  if (!modal) return;
+  
+  // Hide all sections, show error
+  const sections = modal.querySelectorAll('.loading-section, .progress-section, .youtube-info, .transcript-preview, .results-section');
+  sections.forEach(section => section.style.display = 'none');
+  
+  const errorSection = modal.querySelector('.error-section');
+  if (errorSection) {
+    errorSection.style.display = 'block';
+    const errorMessage = errorSection.querySelector('.error-message');
+    if (errorMessage) errorMessage.textContent = message;
+  }
+}
+
+// Legacy function for backward compatibility
+function showYouTubeFactCheckModal(result, videoInfo, transcript) {
+  showYouTubeModal();
+  updateModalWithTranscript(videoInfo, transcript);
+  updateModalWithResults(result);
+}
+
+// Inject YouTube-specific styles
+function injectYouTubeStyles() {
+  if (document.getElementById('ai-fact-checker-youtube-styles')) {
+    return; // Already injected
+  }
+  
+  const style = document.createElement('style');
+  style.id = 'ai-fact-checker-youtube-styles';
+  style.textContent = `
+    .loading-section {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #007bff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .loading-section p {
+      color: #666;
+      font-size: 16px;
+      margin: 0;
+    }
+    
+    .progress-section {
+      margin: 20px 0;
+    }
+    
+    .progress-step {
+      display: flex;
+      align-items: center;
+      margin-bottom: 16px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #f8f9fa;
+      transition: all 0.3s ease;
+    }
+    
+    .progress-step.active {
+      background: #e3f2fd;
+      border-left: 4px solid #2196f3;
+    }
+    
+    .progress-step.completed {
+      background: #e8f5e8;
+      border-left: 4px solid #4caf50;
+    }
+    
+    .step-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #ccc;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+    
+    .progress-step.active .step-icon {
+      background: #2196f3;
+    }
+    
+    .progress-step.completed .step-icon {
+      background: #4caf50;
+    }
+    
+    .step-text {
+      color: #666;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .progress-step.active .step-text {
+      color: #2196f3;
+    }
+    
+    .progress-step.completed .step-text {
+      color: #4caf50;
+    }
+    
+    .youtube-info {
+      background: #f8f9fa;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    
+    .youtube-info h3 {
+      margin: 0 0 12px 0;
+      color: #333;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    .youtube-info p {
+      margin: 8px 0;
+      color: #666;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    
+    .transcript-preview {
+      margin-bottom: 20px;
+    }
+    
+    .transcript-preview h3 {
+      margin: 0 0 12px 0;
+      color: #333;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    
+    .transcript-content {
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      padding: 16px;
+      max-height: 150px;
+      overflow-y: auto;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #333;
+    }
+    
+    .transcript-content p {
+      margin: 0 0 8px 0;
+    }
+    
+    .transcript-content small {
+      color: #666;
+      font-size: 12px;
+    }
+    
+    .error-section {
+      text-align: center;
+      padding: 40px 20px;
+    }
+    
+    .error-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    
+    .error-section h3 {
+      color: #d32f2f;
+      margin: 0 0 12px 0;
+      font-size: 18px;
+    }
+    
+    .error-message {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 0;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
   // Initialize the content script
   function initializeContentScript() {
     if (isInitialized) return;
@@ -1136,6 +1510,61 @@ function animateModalScore(targetScore) {
           sendResponse({ success: true });
         } catch (error) {
           console.error('Error handling factCheck message:', error);
+          sendResponse({ success: false, error: error.message });
+        }
+        return true; // Keep message channel open
+      }
+      
+      if (request.action === 'showYouTubeModal') {
+        try {
+          showYouTubeModal();
+          sendResponse({ success: true });
+        } catch (error) {
+          console.error('Error showing YouTube modal:', error);
+          sendResponse({ success: false, error: error.message });
+        }
+        return true; // Keep message channel open
+      }
+      
+      if (request.action === 'updateYouTubeModalWithTranscript') {
+        try {
+          updateModalWithTranscript(request.videoInfo, request.transcript);
+          sendResponse({ success: true });
+        } catch (error) {
+          console.error('Error updating modal with transcript:', error);
+          sendResponse({ success: false, error: error.message });
+        }
+        return true; // Keep message channel open
+      }
+      
+      if (request.action === 'updateYouTubeModalWithResults') {
+        try {
+          updateModalWithResults(request.result);
+          sendResponse({ success: true });
+        } catch (error) {
+          console.error('Error updating modal with results:', error);
+          sendResponse({ success: false, error: error.message });
+        }
+        return true; // Keep message channel open
+      }
+      
+      if (request.action === 'showModalError') {
+        try {
+          showModalError(request.error);
+          sendResponse({ success: true });
+        } catch (error) {
+          console.error('Error showing modal error:', error);
+          sendResponse({ success: false, error: error.message });
+        }
+        return true; // Keep message channel open
+      }
+      
+      if (request.action === 'showYouTubeFactCheckResult') {
+        try {
+          showYouTubeFactCheckModal(request.result, request.videoInfo, request.transcript);
+          sendResponse({ success: true });
+        } catch (error) {
+          console.error('Error handling YouTube fact check result:', error);
           sendResponse({ success: false, error: error.message });
         }
         return true; // Keep message channel open

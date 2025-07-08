@@ -14,7 +14,8 @@
     "contextMenus",
     "storage",
     "scripting",
-    "notifications"
+    "notifications",
+    "tabs"
   ],
   "host_permissions": [
     "https://*/*",

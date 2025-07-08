@@ -9,7 +9,7 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>🔍 AI Fact Checker</h1>
+      <h1>AI Fact Checker</h1>
       <p>Instant fact-checking powered by AI</p>
       <div id="daily-limit-display" class="daily-limit-display">
         <!-- Daily limit info will be populated by JavaScript -->
@@ -25,9 +25,24 @@
       <!-- Welcome Tab -->
       <div class="tab-content active" id="welcome">
         <div class="section">
-          <h2>👋 Welcome to AI Fact Checker!</h2>
+          <h2>Welcome to AI Fact Checker!</h2>
           <div class="welcome-content">
             <p>Get instant fact-checking powered by AI. Here's how to use the extension:</p>
+            
+            <!-- YouTube Video Fact Check Button -->
+            <div id="youtube-section" class="youtube-section" style="display: none;">
+              <div class="youtube-card">
+                <h3>YouTube Video Fact Check</h3>
+                <p>Fact check the claim presented in this YouTube Video</p>
+                <button id="fact-check-youtube" class="btn btn-youtube">
+                  <span class="btn-text">Fact Check YouTube Video</span>
+                  <span class="btn-spinner" style="display: none;">
+                    <div class="spinner-ring"></div>
+                    <div class="spinner-text">Processing...</div>
+                  </span>
+                </button>
+              </div>
+            </div>
             
             <div class="usage-steps">
               <div class="step">
@@ -64,9 +79,9 @@
       <div class="tab-content" id="settings">
         <div class="section">
           <div class="api-key-note">
-            <p>💡 <strong>Free Tier Available:</strong> You can use the extension without an API key (20 requests/day limit). Add your own API key for unlimited usage!</p>
+            <p><strong>Free Tier Available:</strong> You can use the extension without an API key (20 requests/day limit). Add your own API key for unlimited usage!</p>
           </div>
-          <h2>⚙️ Configuration</h2>
+          <h2>Configuration</h2>
           <div class="form-group">
             <label for="api-provider">AI Provider:</label>
             <select id="api-provider">
@@ -84,9 +99,9 @@
           </div>
 
           <div class="form-group">
-            <label for="api-key">API Key:</label>
-            <input type="password" id="api-key" placeholder="Enter your API key (optional - free tier available)">
-            <small>Your API key is stored locally and never shared. Leave empty to use free tier.</small>
+            <label for="api-key">AI API Key:</label>
+            <input type="password" id="api-key" placeholder="Enter your AI API key (optional - free tier available)">
+            <small>Your AI API key is stored locally and never shared. Leave empty to use free tier.</small>
           </div>
 
           <div class="form-group">
@@ -110,7 +125,7 @@
         </div>
 
         <div class="section">
-          <h2>💡 Help</h2>
+          <h2>Help</h2>
           <div class="help-section">
             <h3>How to get API keys:</h3>
             <ul>

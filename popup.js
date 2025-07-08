@@ -8,6 +8,9 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Check and reload free tier API key
   checkFreeTierStatus();
+  
+  // Check if current tab is YouTube and show YouTube button
+  checkYouTubeTab();
 });
 
 // Check free tier status and reload API key if needed
@@ -24,7 +27,7 @@ function checkFreeTierStatus() {
         }
       });
     } else if (response && response.freeTierAvailable) {
-      console.log('Free tier available with key length:', response.keyLength);
+      console.log('Free tier available');
     }
   });
 }
@@ -84,6 +87,12 @@ function setupEventListeners() {
       loadDailyLimitInfo();
     }
   });
+  
+  // YouTube fact check button
+  const youtubeBtn = document.getElementById('fact-check-youtube');
+  if (youtubeBtn) {
+    youtubeBtn.addEventListener('click', handleYouTubeFactCheck);
+  }
 }
 
 // Setup model selection functionality
@@ -216,6 +225,97 @@ function updateDailyLimitDisplay(limitInfo) {
     `;
   }
 }
+
+// YouTube Detection and Handling Functions
+async function checkYouTubeTab() {
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const isYouTube = tab.url && (
+      tab.url.includes('youtube.com/watch') || 
+      tab.url.includes('youtu.be/')
+    );
+    
+    const youtubeSection = document.getElementById('youtube-section');
+    if (youtubeSection) {
+      if (isYouTube) {
+        youtubeSection.style.display = 'block';
+        // Store video ID for later use
+        const videoId = extractVideoId(tab.url);
+        if (videoId) {
+          window.currentYouTubeVideoId = videoId;
+        }
+      } else {
+        youtubeSection.style.display = 'none';
+      }
+    }
+  } catch (error) {
+    console.error('Error checking YouTube tab:', error);
+  }
+}
+
+function extractVideoId(url) {
+  // Extract video ID from YouTube URL
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/,
+    /youtube\.com\/embed\/([^&\n?#]+)/,
+    /youtube\.com\/v\/([^&\n?#]+)/
+  ];
+  
+  for (const pattern of patterns) {
+    const match = url.match(pattern);
+    if (match) {
+      return match[1];
+    }
+  }
+  
+  return null;
+}
+
+async function handleYouTubeFactCheck() {
+  const youtubeBtn = document.getElementById('fact-check-youtube');
+  
+  if (!window.currentYouTubeVideoId) {
+    console.error('No YouTube video detected');
+    return;
+  }
+  
+  try {
+    // Show loading state with spinner
+    youtubeBtn.disabled = true;
+    youtubeBtn.classList.add('loading');
+    
+    // Send message to background script to handle YouTube transcript
+    chrome.runtime.sendMessage({
+      action: 'factCheckYouTubeVideo',
+      videoId: window.currentYouTubeVideoId
+    }, (response) => {
+      if (response && response.success) {
+        // The background script will handle opening the modal
+        // Keep button in loading state until modal opens
+        setTimeout(() => {
+          resetYouTubeButton();
+        }, 2000);
+      } else {
+        console.error('YouTube fact check failed:', response?.error || 'Unknown error');
+        resetYouTubeButton();
+      }
+    });
+    
+  } catch (error) {
+    console.error('Error handling YouTube fact check:', error);
+    resetYouTubeButton();
+  }
+}
+
+function resetYouTubeButton() {
+  const youtubeBtn = document.getElementById('fact-check-youtube');
+  if (youtubeBtn) {
+    youtubeBtn.disabled = false;
+    youtubeBtn.classList.remove('loading');
+  }
+}
+
+/* Removed showYouTubeStatus function - no longer needed */
 
 
 

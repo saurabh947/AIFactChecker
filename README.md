@@ -1,6 +1,6 @@
 # 🔍 AI Fact Checker Chrome Extension
 
-A powerful Chrome browser extension that provides instant fact-checking capabilities using AI-powered verification. Highlight text, right-click, and get instant accuracy scores with detailed analysis and source citations.
+A powerful Chrome browser extension that provides instant fact-checking capabilities using AI-powered verification. Highlight text, right-click, and get instant accuracy scores with detailed analysis and source citations. Now with YouTube video transcript fact-checking!
 
 ## ✨ Features
 
@@ -8,6 +8,12 @@ A powerful Chrome browser extension that provides instant fact-checking capabili
 - **Right-click Context Menu**: Select any text on any webpage and right-click to access "Fact Check with AI"
 - **Popup Interface**: Click the extension icon for a dedicated fact-checking interface
 - **Real-time Analysis**: Get instant results with AI-powered verification
+
+### 🎥 YouTube Video Fact-Checking (NEW!)
+- **Transcript Analysis**: Automatically extracts and fact-checks YouTube video transcripts
+- **Video Metadata**: Displays video title, channel, upload date, and language
+- **Dynamic Progress**: Real-time updates showing transcript extraction and AI analysis progress
+- **One-Click Access**: Click the YouTube button in the popup to fact-check any YouTube video
 
 ### 📊 Truth Score System
 - **0-100 Accuracy Scale**: Visual truth score with animated display
@@ -34,6 +40,8 @@ A powerful Chrome browser extension that provides instant fact-checking capabili
 - **Detailed Explanations**: AI-generated insights explaining claims
 - **Evidence Presentation**: Clear presentation of supporting facts
 - **Correction Suggestions**: Helpful corrections when claims are inaccurate
+- **Source Credibility**: Assessment of the source website's reliability
+- **Contextual Notes**: Additional context about the surrounding information
 
 ## 🛠️ Installation
 
@@ -45,14 +53,12 @@ A powerful Chrome browser extension that provides instant fact-checking capabili
    cd ai-fact-checker
    ```
 
-2. **Configure API Keys (Optional)**
+2. **Configure API Keys (Required)**
    
-   The extension comes with a free tier that works immediately without any setup!
-   
-   If you want to use your own API keys for unlimited usage:
-   - Open the extension popup
-   - Go to the Settings tab
-   - Add your API key for your preferred provider
+   The extension requires API keys to function:
+   - **For YouTube fact-checking**: You'll need a Supadata API key
+   - **For AI fact-checking**: You'll need an API key from OpenAI, Google AI, or Perplexity
+   - See the Configuration section below for setup instructions
 
 3. **Open Chrome Extensions**
    - Open Chrome and navigate to `chrome://extensions/`
@@ -74,65 +80,74 @@ A powerful Chrome browser extension that provides instant fact-checking capabili
 
 ## ⚙️ Configuration
 
-### Free Tier Available! 🎉
+### Required API Keys
 
-**No API Key Required**: You can use the extension immediately without any setup! The free tier provides:
-- **20 requests per day** using Google's Gemini AI
-- **Instant fact-checking** with no configuration needed
-- **Full feature access** including truth scores, analysis, and sources
+The extension requires API keys to function:
 
-### Setting Up Your Own API Key (Optional)
+#### For YouTube Fact-Checking
+1. **Get Supadata API Key**
+   - Visit [supadata.ai](https://supadata.ai)
+   - Sign up for an account
+   - Generate an API key
+   - Contact the extension developer to add your key
 
-For unlimited usage or to use different AI providers:
+#### For AI Fact-Checking
+Choose one or more AI providers:
+
+**OpenAI (Recommended)**
+1. Visit [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
+2. Sign up or log in to your OpenAI account
+3. Create a new API key
+4. Copy and paste the key into the extension settings
+
+**Google AI (Gemini)**
+1. Visit [makersuite.google.com/app/apikey](https://makersuite.google.com/app/apikey)
+2. Sign in with your Google account
+3. Create a new API key
+4. Copy and paste the key into the extension settings
+
+**Perplexity AI**
+1. Visit [perplexity.ai/settings/api](https://www.perplexity.ai/settings/api)
+2. Sign up or log in to your Perplexity account
+3. Generate an API key
+4. Copy and paste the key into the extension settings
+
+### Setting Up API Keys
 
 1. **Open Extension Settings**
    - Click the AI Fact Checker icon in your toolbar
    - Navigate to the "Settings" tab
 
-2. **Choose Your AI Provider**
-   - Select from OpenAI, Google AI, or Perplexity
-   - Each provider offers different strengths and pricing
-
-3. **Add Your API Key**
+2. **Add Your API Keys**
    - Enter your API key in the designated field
-   - Your key is stored locally and never shared
-   - Leave empty to continue using the free tier
+   - Your keys are stored locally and never shared
+   - Choose your preferred AI provider and model
 
-### Getting API Keys
-
-#### OpenAI (Recommended)
-1. Visit [platform.openai.com/api-keys](https://platform.openai.com/api-keys)
-2. Sign up or log in to your OpenAI account
-3. Create a new API key
-4. Copy and paste the key into the extension
-
-#### Google AI (Gemini)
-1. Visit [makersuite.google.com/app/apikey](https://makersuite.google.com/app/apikey)
-2. Sign in with your Google account
-3. Create a new API key
-4. Copy and paste the key into the extension
-
-#### Perplexity AI
-1. Visit [perplexity.ai/settings/api](https://www.perplexity.ai/settings/api)
-2. Sign up or log in to your Perplexity account
-3. Generate an API key
-4. Copy and paste the key into the extension
+3. **Daily Limits**
+   - Each API provider has different rate limits
+   - The extension tracks daily usage to help manage costs
+   - Check the settings for current usage statistics
 
 ## 🎯 Usage
 
-**Ready to use immediately!** No setup required - just start fact-checking:
-
-### Method 1: Context Menu (Recommended)
+### Method 1: Context Menu (Text Fact-Checking)
 1. **Select Text**: Highlight any text on any webpage
 2. **Right-click**: Open the context menu
 3. **Choose "Fact Check with AI"**: Click the option in the menu
 4. **View Results**: A modal will appear with detailed analysis
 
-### Method 2: Extension Popup
+### Method 2: Extension Popup (Text Fact-Checking)
 1. **Click Extension Icon**: Click the AI Fact Checker icon in your toolbar
 2. **Enter Text**: Paste or type the claim you want to verify
 3. **Click "Check Facts"**: Wait for AI analysis
 4. **Review Results**: View truth score, analysis, and sources
+
+### Method 3: YouTube Video Fact-Checking (NEW!)
+1. **Navigate to YouTube**: Go to any YouTube video
+2. **Open Extension Popup**: Click the AI Fact Checker icon
+3. **Click YouTube Button**: Click the YouTube fact-check button
+4. **Watch Progress**: See real-time updates as the transcript is extracted and analyzed
+5. **Review Results**: View comprehensive fact-checking results for the entire video
 
 ### Understanding Results
 
@@ -148,6 +163,13 @@ For unlimited usage or to use different AI providers:
 - **🔍 Evidence**: Supporting facts and data
 - **📚 Sources**: Clickable links to verification sources
 - **⚠️ Corrections**: Suggested corrections for inaccurate claims
+- **🎯 Source Credibility**: Assessment of the source's reliability
+- **📝 Contextual Notes**: Additional context and background information
+
+#### YouTube-Specific Information
+- **Video Metadata**: Title, channel, upload date, language
+- **Transcript Preview**: First 100 characters of the transcript
+- **Full Analysis**: Fact-checking results for the entire video content
 
 ## 🔧 Technical Details
 
@@ -156,6 +178,12 @@ For unlimited usage or to use different AI providers:
 - **Service Worker**: Background processing for API calls
 - **Content Scripts**: Page integration and modal display
 - **Popup Interface**: User-friendly settings and quick checks
+
+### YouTube Integration
+- **Supadata API**: Professional YouTube transcript extraction
+- **Dynamic Modals**: Real-time progress updates and error handling
+- **Robust Content Script Injection**: Ensures reliable operation across all websites
+- **Error Recovery**: Graceful handling of API failures and network issues
 
 ### Security
 - **Local Storage**: API keys stored securely in Chrome's sync storage
@@ -176,24 +204,44 @@ For unlimited usage or to use different AI providers:
 - Check historical facts and statistics
 - Validate scientific statements
 - Fact-check news articles for assignments
+- **NEW**: Analyze educational YouTube videos and lectures
 
 ### For Journalists
 - Verify sources and claims quickly
 - Check statistics and data accuracy
 - Validate quotes and statements
 - Research background information
+- **NEW**: Fact-check video interviews and press conferences
 
 ### For Researchers
 - Verify academic claims
 - Check statistical data
 - Validate research findings
 - Fact-check competing studies
+- **NEW**: Analyze research presentations and academic videos
 
 ### For General Users
 - Verify news articles and social media posts
 - Check product claims and reviews
 - Validate health and medical information
 - Fact-check political statements and debates
+- **NEW**: Verify claims in YouTube videos, podcasts, and interviews
+
+## 🚀 Recent Updates
+
+### Version 2.0 - YouTube Fact-Checking
+- ✅ **YouTube Transcript Analysis**: Automatically extract and fact-check video transcripts
+- ✅ **Dynamic Progress UI**: Real-time updates showing extraction and analysis progress
+- ✅ **Video Metadata Display**: Show video title, channel, upload date, and language
+- ✅ **Robust Error Handling**: Graceful handling of API failures and network issues
+- ✅ **Improved Content Script Injection**: Reliable operation across all websites
+- ✅ **Clean Modal Interface**: Streamlined UI with focus on essential information
+
+### Version 1.5 - UI Improvements
+- ✅ **Enhanced Modal Design**: Better visual hierarchy and readability
+- ✅ **Progress Indicators**: Clear status updates during fact-checking
+- ✅ **Error Recovery**: Better error messages and recovery options
+- ✅ **Performance Optimizations**: Faster loading and response times
 
 ## 🤝 Contributing
 
@@ -201,7 +249,7 @@ We welcome contributions! Please feel free to submit issues, feature requests, o
 
 ### Development Setup
 1. Clone the repository
-2. Install dependencies (if any)
+2. Configure API keys in `background.js`
 3. Make your changes
 4. Test thoroughly
 5. Submit a pull request
@@ -213,10 +261,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 - Built with modern web technologies
-- Powered by leading AI providers
+- Powered by leading AI providers (OpenAI, Google AI, Perplexity)
+- YouTube integration powered by Supadata
 - Designed for privacy and security
 - Created for the community
 
 ---
 
-**Note**: This extension is for educational and informational purposes. Always verify important information through multiple sources and consult experts when needed. 
+**Note**: This extension is for educational and informational purposes. Always verify important information through multiple sources and consult experts when needed. The YouTube fact-checking feature requires a valid Supadata API key to function. 

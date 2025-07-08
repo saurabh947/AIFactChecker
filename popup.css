@@ -1007,4 +1007,145 @@ body {
   .footer p {
     color: #adb5bd;
   }
+}
+
+/* YouTube Section Styles */
+.youtube-section {
+  margin-bottom: 24px;
+}
+
+.youtube-card {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  border-radius: 12px;
+  padding: 20px;
+  color: white;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.youtube-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+.youtube-card h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+}
+
+.youtube-card p {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  opacity: 0.9;
+  line-height: 1.4;
+}
+
+.btn-youtube {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  font-weight: 600;
+  font-size: 14px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.btn-youtube:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+.btn-youtube:disabled {
+  opacity: 0.8;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-youtube.loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-youtube.loading .btn-text {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+.btn-youtube.loading .btn-spinner {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  gap: 8px;
+}
+
+.spinner-ring {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.spinner-text {
+  font-size: 11px;
+  font-weight: 500;
+  color: white;
+  opacity: 0.9;
+  white-space: nowrap;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Removed YouTube status styles - no longer needed */
+
+/* Dark mode support for YouTube section */
+@media (prefers-color-scheme: dark) {
+  .youtube-card {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+  }
+  
+  .btn-youtube {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.25);
+  }
+  
+  .btn-youtube:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+/* Responsive improvements for YouTube spinner */
+@media (max-width: 480px) {
+  .btn-youtube.loading .btn-spinner {
+    gap: 6px;
+  }
+  
+  .spinner-ring {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .spinner-text {
+    font-size: 10px;
+  }
+  
+  /* Removed YouTube status responsive styles - no longer needed */
 } 
