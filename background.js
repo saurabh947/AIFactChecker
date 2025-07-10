@@ -2,6 +2,7 @@
 
 // Free tier configuration
 const DAILY_REQUEST_LIMIT = 20;
+const DAILY_YOUTUBE_LIMIT = 5;
 const FREE_TIER_PROVIDER = 'google';
 const FREE_TIER_MODEL = 'gemini-1.5-flash';
 const FREE_TIER_GEMINI_API_KEY = '';
@@ -68,6 +69,45 @@ async function checkDailyLimit() {
   return {
     canMakeRequest: currentCount < DAILY_REQUEST_LIMIT,
     remainingRequests: Math.max(0, DAILY_REQUEST_LIMIT - currentCount),
+    totalRequests: currentCount
+  };
+}
+
+// YouTube-specific tracking functions
+async function getDailyYouTubeCount() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(['dailyYouTubeCount', 'lastYouTubeDate'], (result) => {
+      const today = new Date().toDateString();
+      const lastDate = result.lastYouTubeDate;
+      
+      // Reset counter if it's a new day
+      if (lastDate !== today) {
+        chrome.storage.local.set({ dailyYouTubeCount: 0, lastYouTubeDate: today }, () => {
+          resolve(0);
+        });
+      } else {
+        resolve(result.dailyYouTubeCount || 0);
+      }
+    });
+  });
+}
+
+async function incrementDailyYouTubeCount() {
+  return new Promise((resolve) => {
+    chrome.storage.local.get(['dailyYouTubeCount'], (result) => {
+      const newCount = (result.dailyYouTubeCount || 0) + 1;
+      chrome.storage.local.set({ dailyYouTubeCount: newCount }, () => {
+        resolve(newCount);
+      });
+    });
+  });
+}
+
+async function checkDailyYouTubeLimit() {
+  const currentCount = await getDailyYouTubeCount();
+  return {
+    canMakeRequest: currentCount < DAILY_YOUTUBE_LIMIT,
+    remainingRequests: Math.max(0, DAILY_YOUTUBE_LIMIT - currentCount),
     totalRequests: currentCount
   };
 }
@@ -206,7 +246,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       chrome.notifications.create({
         type: 'basic',
         iconUrl: 'icons/icon48.png',
-        title: 'AI Fact Checker',
+        title: 'Truth Detective',
         message: 'An error occurred. Please try again or refresh the page.'
       });
     });
@@ -218,7 +258,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       chrome.notifications.create({
         type: 'basic',
         iconUrl: 'icons/icon48.png',
-        title: 'AI Fact Checker',
+        title: 'Truth Detective',
         message: 'An error occurred. Please try again or refresh the page.'
       });
     });
@@ -257,7 +297,7 @@ async function handleYouTubeContextMenuClick(info, tab) {
       chrome.notifications.create({
         type: 'basic',
         iconUrl: 'icons/icon48.png',
-        title: 'AI Fact Checker',
+        title: 'Truth Detective',
         message: 'YouTube fact-checking is only available on YouTube pages.'
       });
       return;
@@ -270,7 +310,7 @@ async function handleYouTubeContextMenuClick(info, tab) {
       chrome.notifications.create({
         type: 'basic',
         iconUrl: 'icons/icon48.png',
-        title: 'AI Fact Checker',
+        title: 'Truth Detective',
         message: 'Could not identify a YouTube video on this page. Please navigate to a video page.'
       });
       return;
@@ -346,10 +386,10 @@ async function handleYouTubeContextMenuClick(info, tab) {
       }
     };
     
-    // Use the existing fact-checking flow
-    const limitInfo = await checkDailyLimit();
+    // Use YouTube-specific daily limit
+    const limitInfo = await checkDailyYouTubeLimit();
     if (!limitInfo.canMakeRequest) {
-      const errorMessage = `Daily limit reached. You've used ${limitInfo.totalRequests}/${DAILY_REQUEST_LIMIT} requests today. Please try again tomorrow.`;
+      const errorMessage = `Daily YouTube limit reached. You've used ${limitInfo.totalRequests}/${DAILY_YOUTUBE_LIMIT} video fact-checks today. Please try again tomorrow.`;
       
       // Show error in modal
       chrome.tabs.sendMessage(tab.id, {
@@ -399,8 +439,8 @@ async function handleYouTubeContextMenuClick(info, tab) {
     try {
       const result = await performFactCheck(transcriptData.transcript, context, finalProvider, finalModel, finalApiKey, language);
       
-      // Increment request count only on successful API call
-      await incrementDailyRequestCount();
+      // Increment YouTube count only on successful API call
+      await incrementDailyYouTubeCount();
       
       // Notify popup to refresh daily limit display
       try {
@@ -440,18 +480,18 @@ async function handleContextMenuClick(info, tab) {
       return;
     }
 
-    // Check if the tab is accessible (not a chrome:// or edge:// page)
-    if (tab.url && (tab.url.startsWith('chrome://') || tab.url.startsWith('edge://') || tab.url.startsWith('about:'))) {
-      console.log('Cannot inject content script into browser pages');
-      // Show a notification to the user
-      chrome.notifications.create({
-        type: 'basic',
-        iconUrl: 'icons/icon48.png',
-        title: 'AI Fact Checker',
-        message: 'Cannot fact-check browser pages. Please navigate to a regular webpage.'
-      });
-      return;
-    }
+          // Check if the tab is accessible (not a chrome:// or edge:// page)
+      if (tab.url && (tab.url.startsWith('chrome://') || tab.url.startsWith('edge://') || tab.url.startsWith('about:'))) {
+        console.log('Cannot inject content script into browser pages');
+        // Show a notification to the user
+        chrome.notifications.create({
+          type: 'basic',
+          iconUrl: 'icons/icon48.png',
+          title: 'Truth Detective',
+          message: 'Cannot fact-check browser pages. Please navigate to a regular webpage.'
+        });
+        return;
+      }
 
     // Try to inject content script if not already present
     try {
@@ -538,7 +578,7 @@ async function handleContextMenuClick(info, tab) {
             chrome.notifications.create({
               type: 'basic',
               iconUrl: 'icons/icon48.png',
-              title: 'AI Fact Checker',
+              title: 'Truth Detective',
               message: 'Please refresh the page and try again, or use the extension popup instead.'
             });
           }
@@ -548,7 +588,7 @@ async function handleContextMenuClick(info, tab) {
           chrome.notifications.create({
             type: 'basic',
             iconUrl: 'icons/icon48.png',
-            title: 'AI Fact Checker',
+            title: 'Truth Detective',
             message: 'Please refresh the page and try again, or use the extension popup instead.'
           });
         }
@@ -557,7 +597,7 @@ async function handleContextMenuClick(info, tab) {
         chrome.notifications.create({
           type: 'basic',
           iconUrl: 'icons/icon48.png',
-          title: 'AI Fact Checker',
+          title: 'Truth Detective',
           message: 'Please refresh the page and try again, or use the extension popup instead.'
         });
       }
@@ -613,6 +653,17 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         sendResponse(limitInfo);
       }).catch(error => {
         console.error('Error checking daily limit:', error);
+        sendResponse({ error: error.message });
+      });
+      return true;
+    }
+    
+    if (request.action === "checkDailyYouTubeLimit") {
+      // Check daily YouTube limit
+      checkDailyYouTubeLimit().then(limitInfo => {
+        sendResponse(limitInfo);
+      }).catch(error => {
+        console.error('Error checking daily YouTube limit:', error);
         sendResponse({ error: error.message });
       });
       return true;

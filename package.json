@@ -1,6 +1,6 @@
 {
-  "name": "ai-fact-checker",
-  "version": "1.0.0",
+  "name": "truth-detective",
+  "version": "1.1.0",
   "description": "A Chrome extension for instant AI-powered fact-checking with multi-provider support",
   "main": "background.js",
   "scripts": {

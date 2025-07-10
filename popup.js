@@ -185,6 +185,13 @@ function loadDailyLimitInfo() {
       updateDailyLimitDisplay(response);
     }
   });
+  
+  // Also load YouTube limits
+  chrome.runtime.sendMessage({ action: 'checkDailyYouTubeLimit' }, (response) => {
+    if (response && !response.error) {
+      updateYouTubeLimitDisplay(response);
+    }
+  });
 }
 
 // Update daily limit display
@@ -221,6 +228,52 @@ function updateDailyLimitDisplay(limitInfo) {
         <span class="remaining-requests ${cssClass}">${remainingText}</span>
         <span class="total-requests">${totalText}</span>
         ${tierInfo}
+      </div>
+    `;
+  }
+}
+
+// Update YouTube limit display
+function updateYouTubeLimitDisplay(limitInfo) {
+  const youtubeSection = document.getElementById('youtube-section');
+  if (youtubeSection) {
+    const youtubeBtn = document.getElementById('fact-check-youtube');
+    const btnText = youtubeBtn.querySelector('.btn-text');
+    
+    // Check if user has their own API key
+    const apiKeyInput = document.getElementById('api-key');
+    const hasOwnKey = apiKeyInput && apiKeyInput.value.trim() !== '';
+    
+    let limitText = '';
+    let cssClass = 'available';
+    
+    if (!limitInfo.canMakeRequest) {
+      limitText = 'Daily YouTube limit reached';
+      cssClass = 'limit-reached';
+      youtubeBtn.disabled = true;
+    } else if (limitInfo.remainingRequests <= 1) {
+      limitText = `${limitInfo.remainingRequests} video fact-check remaining today`;
+      cssClass = 'limit-warning';
+    } else {
+      limitText = `${limitInfo.remainingRequests} video fact-checks remaining today`;
+      cssClass = 'available';
+    }
+    
+    const totalText = `${limitInfo.totalRequests}/5 video fact-checks used today`;
+    
+    // Add or update limit display in YouTube section
+    let limitDisplay = youtubeSection.querySelector('.youtube-limit-display');
+    if (!limitDisplay) {
+      limitDisplay = document.createElement('div');
+      limitDisplay.className = 'youtube-limit-display';
+      youtubeSection.appendChild(limitDisplay);
+    }
+    
+    limitDisplay.innerHTML = `
+      <div class="limit-info">
+        <span class="remaining-requests ${cssClass}">${limitText}</span>
+        <span class="total-requests">${totalText}</span>
+        ${!hasOwnKey ? '<span class="free-tier-badge">Using Free Tier</span>' : ''}
       </div>
     `;
   }
@@ -280,23 +333,39 @@ async function handleYouTubeFactCheck() {
   }
   
   try {
-    // Show loading state with spinner
-    youtubeBtn.disabled = true;
-    youtubeBtn.classList.add('loading');
-    
-    // Send message to background script to handle YouTube transcript
-    chrome.runtime.sendMessage({
-      action: 'factCheckYouTubeVideo',
-      videoId: window.currentYouTubeVideoId
-    }, (response) => {
-      if (response && response.success) {
-        // The background script will handle opening the modal
-        // Keep button in loading state until modal opens
-        setTimeout(() => {
+    // Check YouTube limit first
+    chrome.runtime.sendMessage({ action: 'checkDailyYouTubeLimit' }, (limitResponse) => {
+      if (limitResponse && !limitResponse.error) {
+        if (!limitResponse.canMakeRequest) {
+          console.error('Daily YouTube limit reached');
           resetYouTubeButton();
-        }, 2000);
+          return;
+        }
+        
+        // Show loading state with spinner
+        youtubeBtn.disabled = true;
+        youtubeBtn.classList.add('loading');
+        
+        // Send message to background script to handle YouTube transcript
+        chrome.runtime.sendMessage({
+          action: 'factCheckYouTubeVideo',
+          videoId: window.currentYouTubeVideoId
+        }, (response) => {
+          if (response && response.success) {
+            // The background script will handle opening the modal
+            // Keep button in loading state until modal opens
+            setTimeout(() => {
+              resetYouTubeButton();
+              // Refresh limits after successful fact check
+              loadDailyLimitInfo();
+            }, 2000);
+          } else {
+            console.error('YouTube fact check failed:', response?.error || 'Unknown error');
+            resetYouTubeButton();
+          }
+        });
       } else {
-        console.error('YouTube fact check failed:', response?.error || 'Unknown error');
+        console.error('Error checking YouTube limit:', limitResponse?.error || 'Unknown error');
         resetYouTubeButton();
       }
     });

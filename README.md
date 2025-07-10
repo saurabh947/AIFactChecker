@@ -1,4 +1,4 @@
-# 🔍 AI Fact Checker Chrome Extension
+# 🔍 Truth Detective - Instant Fact Check Anything
 
 A powerful Chrome browser extension that provides instant fact-checking capabilities using AI-powered verification. Highlight text, right-click, and get instant accuracy scores with detailed analysis and source citations. Now with YouTube video transcript fact-checking!
 
@@ -53,11 +53,11 @@ A powerful Chrome browser extension that provides instant fact-checking capabili
    cd ai-fact-checker
    ```
 
-2. **Configure API Keys (Required)**
+2. **Configure API Keys (Optional)**
    
-   The extension requires API keys to function:
-   - **For YouTube fact-checking**: You'll need a Supadata API key
-   - **For AI fact-checking**: You'll need an API key from OpenAI, Google AI, or Perplexity
+   The extension works with free tiers, but you can add API keys for unlimited usage:
+   - **For YouTube fact-checking**: Free tier (5 videos/day) or add Supadata API key for unlimited
+   - **For AI fact-checking**: Free tier (20 requests/day) or add your own API keys for unlimited
    - See the Configuration section below for setup instructions
 
 3. **Open Chrome Extensions**
@@ -71,10 +71,10 @@ A powerful Chrome browser extension that provides instant fact-checking capabili
 
 5. **Pin the Extension**
    - Click the puzzle piece icon in Chrome's toolbar
-   - Find "AI Fact Checker" and click the pin icon
+   - Find "Truth Detective" and click the pin icon
 
 ### Method 2: Chrome Web Store (Coming Soon)
-- Search for "AI Fact Checker" in the Chrome Web Store
+- Search for "Truth Detective" in the Chrome Web Store
 - Click "Add to Chrome"
 - Follow the installation prompts
 
@@ -85,6 +85,9 @@ A powerful Chrome browser extension that provides instant fact-checking capabili
 The extension requires API keys to function:
 
 #### For YouTube Fact-Checking
+**Free Tier Available**: You can use YouTube fact-checking without an API key (5 videos/day limit). Add your own API key for unlimited usage!
+
+**To get unlimited YouTube fact-checking:**
 1. **Get Supadata API Key**
    - Visit [supadata.ai](https://supadata.ai)
    - Sign up for an account
@@ -115,7 +118,7 @@ Choose one or more AI providers:
 ### Setting Up API Keys
 
 1. **Open Extension Settings**
-   - Click the AI Fact Checker icon in your toolbar
+   - Click the Truth Detective icon in your toolbar
    - Navigate to the "Settings" tab
 
 2. **Add Your API Keys**
@@ -124,7 +127,9 @@ Choose one or more AI providers:
    - Choose your preferred AI provider and model
 
 3. **Daily Limits**
-   - Each API provider has different rate limits
+   - **Text Fact-Checking**: 20 requests/day (free tier)
+   - **YouTube Fact-Checking**: 5 videos/day (free tier)
+   - Add your own API keys for unlimited usage
    - The extension tracks daily usage to help manage costs
    - Check the settings for current usage statistics
 
@@ -137,14 +142,14 @@ Choose one or more AI providers:
 4. **View Results**: A modal will appear with detailed analysis
 
 ### Method 2: Extension Popup (Text Fact-Checking)
-1. **Click Extension Icon**: Click the AI Fact Checker icon in your toolbar
+1. **Click Extension Icon**: Click the Truth Detective icon in your toolbar
 2. **Enter Text**: Paste or type the claim you want to verify
 3. **Click "Check Facts"**: Wait for AI analysis
 4. **Review Results**: View truth score, analysis, and sources
 
 ### Method 3: YouTube Video Fact-Checking (NEW!)
 1. **Navigate to YouTube**: Go to any YouTube video
-2. **Open Extension Popup**: Click the AI Fact Checker icon
+2. **Open Extension Popup**: Click the Truth Detective icon
 3. **Click YouTube Button**: Click the YouTube fact-check button
 4. **Watch Progress**: See real-time updates as the transcript is extracted and analyzed
 5. **Review Results**: View comprehensive fact-checking results for the entire video
@@ -229,6 +234,13 @@ Choose one or more AI providers:
 
 ## 🚀 Recent Updates
 
+### Version 1.1.0 - Truth Detective Rebrand & YouTube Free Tier
+- ✅ **New Branding**: Rebranded as "Truth Detective - Instant Fact Check Anything"
+- ✅ **YouTube Free Tier**: Added 5 videos/day free tier for YouTube fact-checking
+- ✅ **Separate Limit Tracking**: YouTube and text fact-checking have independent daily limits
+- ✅ **Enhanced UI**: Updated limit displays and user interface
+- ✅ **Improved Documentation**: Updated README and privacy policy
+
 ### Version 2.0 - YouTube Fact-Checking
 - ✅ **YouTube Transcript Analysis**: Automatically extract and fact-check video transcripts
 - ✅ **Dynamic Progress UI**: Real-time updates showing extraction and analysis progress
@@ -268,4 +280,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Note**: This extension is for educational and informational purposes. Always verify important information through multiple sources and consult experts when needed. The YouTube fact-checking feature requires a valid Supadata API key to function. 
+**Note**: This extension is for educational and informational purposes. Always verify important information through multiple sources and consult experts when needed. The YouTube fact-checking feature works with the free tier (5 videos/day) or with your own Supadata API key for unlimited usage. 

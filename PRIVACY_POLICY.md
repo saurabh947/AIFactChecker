@@ -1,16 +1,16 @@
-# Privacy Policy for AI Fact Checker Chrome Extension
+# Privacy Policy for Truth Detective Chrome Extension
 
-**Last Updated:** July 2025
+**Last Updated:** January 2025
 
 ## Overview
 
-AI Fact Checker is a Chrome extension that provides instant fact-checking capabilities using AI models. This privacy policy explains how we handle your data and what information is collected, stored, or transmitted.
+Truth Detective is a Chrome extension that provides instant fact-checking capabilities using AI models. This privacy policy explains how we handle your data and what information is collected, stored, or transmitted.
 
 ## Data Collection
 
 **We do not collect, store, or transmit any personal data or browsing information.**
 
-The AI Fact Checker extension operates entirely locally within your browser and does not:
+The Truth Detective extension operates entirely locally within your browser and does not:
 - Collect personal information
 - Track your browsing history
 - Store your search queries
@@ -20,7 +20,7 @@ The AI Fact Checker extension operates entirely locally within your browser and 
 ## API Keys and Storage
 
 ### Secure Storage
-When you provide API keys for AI services (OpenAI, Google Gemini, Perplexity AI), these keys are stored securely in Chrome's built-in storage system using the `chrome.storage.local` API.
+When you provide API keys for AI services (OpenAI, Google Gemini, Perplexity AI) or YouTube services (Supadata), these keys are stored securely in Chrome's built-in storage system using the `chrome.storage.local` API.
 
 ### Local Storage Only
 - API keys are stored locally on your device
@@ -36,28 +36,30 @@ When you provide API keys for AI services (OpenAI, Google Gemini, Perplexity AI)
 
 ## Third-Party Services
 
-The extension integrates with the following AI services:
+The extension integrates with the following services:
 - **OpenAI GPT-4**: For fact-checking and analysis
 - **Google Gemini**: For alternative fact-checking results
 - **Perplexity AI**: For additional verification sources
+- **Supadata**: For YouTube transcript extraction (when using unlimited tier)
 
 When you use these services:
-- Your queries are sent directly to the respective AI service
+- Your queries are sent directly to the respective service
 - Each service has its own privacy policy and data handling practices
 - We recommend reviewing their privacy policies for complete information
 
 ## Permissions
 
 The extension requests the following permissions:
-- **Storage**: To securely store your API keys locally
+- **Storage**: To securely store your API keys and daily usage limits locally
 - **Context Menus**: To provide right-click fact-checking functionality
 - **Active Tab**: To access the text you've selected for fact-checking
+- **Scripting**: To inject content scripts for modal display and YouTube integration
 
 These permissions are used only for the stated purposes and do not enable any data collection or tracking.
 
 ## Data Retention
 
-Since we do not collect any data, there is no data retention policy. Your API keys are stored locally and can be removed at any time by:
+Since we do not collect any data, there is no data retention policy. Your API keys and daily usage limits are stored locally and can be removed at any time by:
 - Deleting the extension
 - Clearing Chrome's extension data
 - Manually removing keys through the extension's settings
@@ -74,9 +76,9 @@ If you have any questions about this privacy policy or how your data is handled,
 
 Since we do not collect personal data, there are no personal data rights to exercise. However, you always have the right to:
 - Remove the extension and all associated data
-- Clear stored API keys
+- Clear stored API keys and usage limits
 - Stop using the extension at any time
 
 ---
 
-**Note:** This privacy policy applies only to the AI Fact Checker Chrome extension. It does not cover the privacy practices of the AI services (OpenAI, Google Gemini, Perplexity AI) that the extension integrates with. 
+**Note:** This privacy policy applies only to the Truth Detective Chrome extension. It does not cover the privacy practices of the AI services (OpenAI, Google Gemini, Perplexity AI) or YouTube services (Supadata) that the extension integrates with. 

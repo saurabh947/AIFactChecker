@@ -21,7 +21,7 @@ if (typeof window.aiFactCheckerInitialized === 'undefined') {
     <div class="fact-checker-overlay">
       <div class="fact-checker-modal animated-modal">
         <div class="modal-header">
-          <h2>AI Fact Checker</h2>
+          <h2>Truth Detective</h2>
           <button class="close-btn" onclick="this.closest('#ai-fact-checker-modal').remove()">×</button>
         </div>
         <div class="modal-content">
@@ -1130,7 +1130,7 @@ function showYouTubeModal() {
     <div class="fact-checker-overlay">
       <div class="fact-checker-modal animated-modal">
         <div class="modal-header">
-          <h2>YouTube Video Fact Check</h2>
+          <h2>YouTube Video Truth Detective</h2>
           <button class="close-btn" onclick="this.closest('#ai-fact-checker-modal').remove()">×</button>
         </div>
         <div class="modal-content">

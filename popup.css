@@ -1115,6 +1115,55 @@ body {
 
 /* Removed YouTube status styles - no longer needed */
 
+/* YouTube Limit Display Styles */
+.youtube-limit-display {
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.youtube-limit-display .limit-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.youtube-limit-display .remaining-requests {
+  font-weight: 600;
+  color: white;
+}
+
+.youtube-limit-display .remaining-requests.available {
+  color: #90EE90;
+}
+
+.youtube-limit-display .remaining-requests.limit-warning {
+  color: #FFD700;
+}
+
+.youtube-limit-display .remaining-requests.limit-reached {
+  color: #FFB6C1;
+}
+
+.youtube-limit-display .total-requests {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 11px;
+}
+
+.youtube-limit-display .free-tier-badge {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  display: inline-block;
+  margin-top: 2px;
+}
+
 /* Dark mode support for YouTube section */
 @media (prefers-color-scheme: dark) {
   .youtube-card {
@@ -1129,6 +1178,11 @@ body {
   .btn-youtube:hover {
     background: rgba(255, 255, 255, 0.25);
     border-color: rgba(255, 255, 255, 0.4);
+  }
+  
+  .youtube-limit-display {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.15);
   }
 }
 
