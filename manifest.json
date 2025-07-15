@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Truth Detective - Instant Fact Check Anything",
+  "name": "Truth Detective - Instant Fact Check",
   "version": "1.1.0",
-  "description": "Instant fact-checking with AI-powered verification and source citations",
+  "description": "Instant fact-check anything with AI-powered verification and source citations",
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",

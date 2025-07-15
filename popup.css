@@ -43,7 +43,7 @@ body {
 
 /* Header */
 .header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #F5F5DC 100%);
   color: white;
   padding: 20px;
   text-align: center;
@@ -103,7 +103,7 @@ body {
 
 .free-tier-badge {
   display: inline-block;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #F5F5DC 100%);
   color: white;
   font-size: 10px;
   padding: 3px 8px;
@@ -137,14 +137,14 @@ body {
 
 .tab-btn.active {
   background: white;
-  color: #667eea;
-  border-bottom: 3px solid #667eea;
+  color: #8B4513;
+  border-bottom: 3px solid #8B4513;
   z-index: 2;
   animation: tabActiveFade 0.5s cubic-bezier(.4,0,.2,1);
 }
 @keyframes tabActiveFade {
   from { background: #f8f9fa; color: #495057; }
-  to { background: white; color: #667eea; }
+  to { background: white; color: #8B4513; }
 }
 
 .tab-btn:not(.active):hover {
@@ -232,17 +232,17 @@ body {
 
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #F5F5DC 100%);
   color: white;
 }
 
 .btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
 }
 
 .btn-secondary {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  background: linear-gradient(135deg, #CD853F 0%, #DEB887 50%, #F5F5DC 100%);
   color: white;
   border: none;
   padding: 12px 24px;
@@ -250,13 +250,13 @@ body {
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3);
+  box-shadow: 0 4px 15px rgba(205, 133, 63, 0.3);
   margin-left: 10px;
 }
 
 .btn-secondary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(240, 147, 251, 0.4);
+  box-shadow: 0 4px 12px rgba(205, 133, 63, 0.4);
 }
 
 .btn:active {
@@ -306,7 +306,7 @@ body {
   width: 16px;
   height: 16px;
   border: 2px solid #f3f3f3;
-  border-top: 2px solid #667eea;
+  border-top: 2px solid #8B4513;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -326,8 +326,8 @@ body {
   padding: 28px 24px 20px 24px;
   background: #f8f9fa;
   border-radius: 12px;
-  border-left: 5px solid #667eea;
-  box-shadow: 0 2px 12px rgba(102, 126, 234, 0.07);
+  border-left: 5px solid #8B4513;
+  box-shadow: 0 2px 12px rgba(139, 69, 19, 0.07);
   animation: resultFadeIn 0.7s cubic-bezier(.4,0,.2,1);
   width: 100%;
   box-sizing: border-box;
@@ -350,10 +350,10 @@ body {
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #F5F5DC 100%);
   color: white;
   font-weight: bold;
-  box-shadow: 0 2px 12px rgba(102, 126, 234, 0.13);
+  box-shadow: 0 2px 12px rgba(139, 69, 19, 0.13);
   animation: popScore 0.7s cubic-bezier(.4,0,.2,1);
 }
 @keyframes popScore {
@@ -488,8 +488,8 @@ body {
 .form-group select:focus,
 .form-group input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #8B4513;
+  box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.1);
 }
 
 .form-group select {
@@ -654,7 +654,7 @@ body {
   padding: 12px;
   background: #f8f9fa;
   border-radius: 8px;
-  border-left: 3px solid #667eea;
+  border-left: 3px solid #8B4513;
 }
 
 .step:last-child {
@@ -667,7 +667,7 @@ body {
   justify-content: center;
   width: 24px;
   height: 24px;
-  background: #667eea;
+  background: #8B4513;
   color: white;
   border-radius: 50%;
   font-weight: bold;
@@ -984,8 +984,8 @@ body {
   input[type="text"]:focus,
   input[type="password"]:focus,
   select:focus {
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+    border-color: #8B4513;
+    box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.2);
   }
   
   .btn-secondary {

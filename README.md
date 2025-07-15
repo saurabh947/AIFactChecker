@@ -1,4 +1,4 @@
-# 🔍 Truth Detective - Instant Fact Check Anything
+# 🔍 Truth Detective - Instant Fact Check
 
 A powerful Chrome browser extension that provides instant fact-checking capabilities using AI-powered verification. Highlight text, right-click, and get instant accuracy scores with detailed analysis and source citations. Now with YouTube video transcript fact-checking!
 
@@ -235,7 +235,7 @@ Choose one or more AI providers:
 ## 🚀 Recent Updates
 
 ### Version 1.1.0 - Truth Detective Rebrand & YouTube Free Tier
-- ✅ **New Branding**: Rebranded as "Truth Detective - Instant Fact Check Anything"
+- ✅ **New Branding**: Rebranded as "Truth Detective - Instant Fact Check"
 - ✅ **YouTube Free Tier**: Added 5 videos/day free tier for YouTube fact-checking
 - ✅ **Separate Limit Tracking**: YouTube and text fact-checking have independent daily limits
 - ✅ **Enhanced UI**: Updated limit displays and user interface
